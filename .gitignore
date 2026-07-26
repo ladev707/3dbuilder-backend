@@ -1,1 +1,5 @@
 .docker/local/db/*
+.env
+.env.production
+.DS_Store
+*.log
