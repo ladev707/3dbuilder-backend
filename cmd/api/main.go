@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"github.com/joho/godotenv"
 	"github.com/ladev707/3dbuilder-backend/pkg/logger"
@@ -12,6 +11,8 @@ func main() {
 	if err != nil {
 		panic("Error loading .env file")
 	}
-	fmt.Println("app name is: ", os.Getenv("APP_NAME"))
-	logger.Info("app started successfully")
+	logger.InitLogger()
+	logger.Info("app started successfully", "app_name", os.Getenv("APP_NAME"))
+	logger.Debug("this is debug message", "key", "value")
+	logger.Error("this is error message", "error", err)
 }
