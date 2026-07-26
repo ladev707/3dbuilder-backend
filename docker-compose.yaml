@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:18.4-alpine
+    container_name: postgres_db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=local_3dbuilder
+    ports:
+      - "5432:5432"
+    volumes:
+      - .docker/local/db:/var/lib/postgresql
+    networks:
+      - 3d-app_network
+    restart: unless-stopped
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready -U postgres"]
+    #   interval: 5s
+    #   timeout: 5s
+    #   retries: 5
+
+networks:
+  3d-app_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
