@@ -3,3 +3,4 @@
 .env.production
 .DS_Store
 *.log
+/tmp
