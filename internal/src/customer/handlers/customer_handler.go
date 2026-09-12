@@ -1,21 +1,9 @@
-package customer
+package customerhandler
 
-import (
-	"github.com/gin-gonic/gin"
-)
+// Handler is the HTTP adapter for customer-management use cases.
+// Authentication endpoints live in the auth module.
+type Handler struct{}
 
-type CustomerHandler struct {
-	CustomerService service.CustomerService
+func New() *Handler {
+	return &Handler{}
 }
-
-func NewCustomerHandler(customerService service.CustomerService) *CustomerHandler {
-	return &CustomerHandler{CustomerService: customerService}
-}
-
-// func (h *ClientHandler) Register(c *gin.Context) {
-// 	var user models.User
-// 	if err := c.ShouldBindJSON(&user); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-// }

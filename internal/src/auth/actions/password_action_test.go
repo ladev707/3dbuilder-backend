@@ -7,7 +7,7 @@ import (
 func TestHashPassword(t *testing.T) {
 	t.Parallel()
 	password := "password"
-	
+
 	hashedPassword, err := HashPassword(password)
 	if err != nil {
 		t.Fatalf("HashPassword failed: %v", err)
