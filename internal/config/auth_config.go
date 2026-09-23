@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+const ClaimsContextKey = "auth.claims"
+
 type AuthConfig struct {
 	Secret          string
 	Issuer          string
@@ -32,7 +34,7 @@ func Load() (Config, error) {
 
 	cfg := Config{
 		AppPort:     envOrDefault("APP_PORT", "8080"),
-		DatabaseURL: os.Getenv("DATABASE_URL"),
+		DatabaseURL: os.Getenv("DB_URL"),
 		Auth: AuthConfig{
 			Secret:          os.Getenv("AUTH_JWT_SECRET"),
 			Issuer:          envOrDefault("AUTH_JWT_ISSUER", "3dbuilder-api"),
@@ -41,7 +43,7 @@ func Load() (Config, error) {
 		},
 	}
 	if cfg.DatabaseURL == "" {
-		return Config{}, fmt.Errorf("DATABASE_URL is required")
+		return Config{}, fmt.Errorf("DB_URL is required")
 	}
 	if len(cfg.Auth.Secret) < 32 {
 		return Config{}, fmt.Errorf("AUTH_JWT_SECRET must be at least 32 characters")

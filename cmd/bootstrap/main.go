@@ -17,14 +17,14 @@ import (
 
 func main() {
 	_ = godotenv.Load()
-	databaseURL := os.Getenv("DATABASE_URL")
+	databaseURL := os.Getenv("DB_URL")
 	email := strings.TrimSpace(os.Getenv("BOOTSTRAP_EMAIL"))
 	username := strings.TrimSpace(os.Getenv("BOOTSTRAP_USERNAME"))
 	password := os.Getenv("BOOTSTRAP_PASSWORD")
 	gate := authmodel.Gate(envOrDefault("BOOTSTRAP_GATE", string(authmodel.GateUser)))
 	role := strings.TrimSpace(envOrDefault("BOOTSTRAP_ROLE", defaultRole(gate)))
 	if databaseURL == "" || email == "" || username == "" || len(password) < 8 || !gate.Valid() || role == "" {
-		log.Fatal("DATABASE_URL, valid BOOTSTRAP_GATE, BOOTSTRAP_EMAIL, BOOTSTRAP_USERNAME, BOOTSTRAP_ROLE, and BOOTSTRAP_PASSWORD (minimum 8 characters) are required")
+		log.Fatal("DB_URL, BOOTSTRAP_EMAIL, BOOTSTRAP_USERNAME, BOOTSTRAP_PASSWORD (minimum 8 characters), valid BOOTSTRAP_GATE, and BOOTSTRAP_ROLE are required")
 	}
 
 	passwordHash, err := authaction.HashPassword(password)

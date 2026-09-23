@@ -5,12 +5,10 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-
+	"github.com/ladev707/3dbuilder-backend/internal/config"
 	authmodel "github.com/ladev707/3dbuilder-backend/internal/src/auth/models"
 	authservice "github.com/ladev707/3dbuilder-backend/internal/src/auth/service"
 )
-
-const claimsContextKey = "auth.claims"
 
 type TokenParser interface {
 	ParseToken(string, string) (*authservice.Claims, error)
@@ -29,7 +27,7 @@ func Authenticate(parser TokenParser) gin.HandlerFunc {
 			abortUnauthorized(c)
 			return
 		}
-		c.Set(claimsContextKey, claims)
+		c.Set(config.ClaimsContextKey, claims)
 		c.Next()
 	}
 }
@@ -62,7 +60,7 @@ func RequirePermission(permissions ...string) gin.HandlerFunc {
 }
 
 func ClaimsFromContext(c *gin.Context) (*authservice.Claims, bool) {
-	value, exists := c.Get(claimsContextKey)
+	value, exists := c.Get(config.ClaimsContextKey)
 	if !exists {
 		return nil, false
 	}

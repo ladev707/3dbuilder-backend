@@ -14,9 +14,9 @@ import (
 
 func main() {
 	_ = godotenv.Load()
-	databaseURL := os.Getenv("DATABASE_URL")
+	databaseURL := os.Getenv("DB_URL")
 	if databaseURL == "" {
-		log.Fatal("DATABASE_URL is required")
+		log.Fatal("DB_URL is required")
 	}
 	command := "up"
 	if len(os.Args) > 1 {
