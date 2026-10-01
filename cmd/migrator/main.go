@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"log"
 	"os"
@@ -33,7 +34,7 @@ func main() {
 	if err := goose.SetDialect("postgres"); err != nil {
 		log.Fatalf("set migration dialect: %v", err)
 	}
-	if err := goose.Run(command, db, "."); err != nil {
+	if err := goose.RunContext(context.Background(), command, db, "."); err != nil {
 		log.Fatalf("goose %s: %v", command, err)
 	}
 }
