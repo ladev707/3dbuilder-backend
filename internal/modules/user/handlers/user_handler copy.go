@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	usermodel "github.com/ladev707/3dbuilder-backend/internal/src/user/models"
+	usermodel "github.com/ladev707/3dbuilder-backend/internal/modules/user/models"
 )
 
 // Handler is the HTTP adapter for user-management use cases.

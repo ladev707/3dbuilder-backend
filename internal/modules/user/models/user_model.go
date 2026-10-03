@@ -29,7 +29,7 @@ type User struct {
 	Username     string     `json:"username" validate:"required"`
 	Email        string     `json:"email" validate:"required,email"`
 	PasswordHash string     `json:"-" validate:"required"`
-	Active       bool       `json:"active" validate:"required"`
+	IsActive     bool       `json:"is_active" validate:"required"`
 	CreatedAt    time.Time  `json:"created_at" validate:"required,datetime"`
 	UpdatedAt    time.Time  `json:"updated_at" validate:"required,datetime"`
 	DeletedAt    *time.Time `json:"deleted_at,omitempty" validate:"omitempty,datetime"`
