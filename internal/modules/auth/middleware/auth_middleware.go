@@ -1,13 +1,14 @@
 package authmiddleware
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/ladev707/3dbuilder-backend/internal/config"
-	authmodel "github.com/ladev707/3dbuilder-backend/internal/src/auth/models"
-	authservice "github.com/ladev707/3dbuilder-backend/internal/src/auth/service"
+	authmodel "github.com/ladev707/3dbuilder-backend/internal/modules/auth/models"
+	authservice "github.com/ladev707/3dbuilder-backend/internal/modules/auth/service"
 )
 
 type TokenParser interface {
@@ -33,6 +34,7 @@ func Authenticate(parser TokenParser) gin.HandlerFunc {
 }
 
 func RequireGate(gate authmodel.Gate) gin.HandlerFunc {
+	fmt.Println("RequireGate")
 	return func(c *gin.Context) {
 		claims, ok := ClaimsFromContext(c)
 		if !ok {

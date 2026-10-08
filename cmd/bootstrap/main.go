@@ -11,8 +11,8 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 
-	authaction "github.com/ladev707/3dbuilder-backend/internal/src/auth/actions"
-	authmodel "github.com/ladev707/3dbuilder-backend/internal/src/auth/models"
+	authaction "github.com/ladev707/3dbuilder-backend/internal/modules/auth/actions"
+	authmodel "github.com/ladev707/3dbuilder-backend/internal/modules/auth/models"
 )
 
 func main() {

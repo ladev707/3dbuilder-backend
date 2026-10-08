@@ -10,9 +10,9 @@ import (
 
 	v1 "github.com/ladev707/3dbuilder-backend/internal/api/v1"
 	"github.com/ladev707/3dbuilder-backend/internal/config"
-	authhandler "github.com/ladev707/3dbuilder-backend/internal/src/auth/handlers"
-	authrepository "github.com/ladev707/3dbuilder-backend/internal/src/auth/repository"
-	authservice "github.com/ladev707/3dbuilder-backend/internal/src/auth/service"
+	authhandler "github.com/ladev707/3dbuilder-backend/internal/modules/auth/handlers"
+	authrepository "github.com/ladev707/3dbuilder-backend/internal/modules/auth/repository"
+	authservice "github.com/ladev707/3dbuilder-backend/internal/modules/auth/service"
 )
 
 type Application struct {

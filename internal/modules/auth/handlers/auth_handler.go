@@ -6,9 +6,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	authmiddleware "github.com/ladev707/3dbuilder-backend/internal/src/auth/middleware"
-	authmodel "github.com/ladev707/3dbuilder-backend/internal/src/auth/models"
-	authservice "github.com/ladev707/3dbuilder-backend/internal/src/auth/service"
+	authmiddleware "github.com/ladev707/3dbuilder-backend/internal/modules/auth/middleware"
+	authmodel "github.com/ladev707/3dbuilder-backend/internal/modules/auth/models"
+	authservice "github.com/ladev707/3dbuilder-backend/internal/modules/auth/service"
 )
 
 type Handler struct {

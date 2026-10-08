@@ -13,9 +13,9 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/ladev707/3dbuilder-backend/internal/config"
-	authaction "github.com/ladev707/3dbuilder-backend/internal/src/auth/actions"
-	authmodel "github.com/ladev707/3dbuilder-backend/internal/src/auth/models"
-	authrepository "github.com/ladev707/3dbuilder-backend/internal/src/auth/repository"
+	authaction "github.com/ladev707/3dbuilder-backend/internal/modules/auth/actions"
+	authmodel "github.com/ladev707/3dbuilder-backend/internal/modules/auth/models"
+	authrepository "github.com/ladev707/3dbuilder-backend/internal/modules/auth/repository"
 )
 
 var (

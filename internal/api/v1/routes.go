@@ -3,10 +3,10 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 
-	authhandler "github.com/ladev707/3dbuilder-backend/internal/src/auth/handlers"
-	authmiddleware "github.com/ladev707/3dbuilder-backend/internal/src/auth/middleware"
-	authmodel "github.com/ladev707/3dbuilder-backend/internal/src/auth/models"
-	authservice "github.com/ladev707/3dbuilder-backend/internal/src/auth/service"
+	authhandler "github.com/ladev707/3dbuilder-backend/internal/modules/auth/handlers"
+	authmiddleware "github.com/ladev707/3dbuilder-backend/internal/modules/auth/middleware"
+	authmodel "github.com/ladev707/3dbuilder-backend/internal/modules/auth/models"
+	authservice "github.com/ladev707/3dbuilder-backend/internal/modules/auth/service"
 )
 
 type Dependencies struct {

@@ -2,7 +2,7 @@ package usermiddleware
 
 import (
 	"github.com/gin-gonic/gin"
-	userservice "github.com/ladev707/3dbuilder-backend/internal/src/user/service"
+	userservice "github.com/ladev707/3dbuilder-backend/internal/modules/user/service"
 )
 
 func UserMiddleware() gin.HandlerFunc {

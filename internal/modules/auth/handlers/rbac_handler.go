@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 
-	authmodel "github.com/ladev707/3dbuilder-backend/internal/src/auth/models"
-	authrepository "github.com/ladev707/3dbuilder-backend/internal/src/auth/repository"
+	authmodel "github.com/ladev707/3dbuilder-backend/internal/modules/auth/models"
+	authrepository "github.com/ladev707/3dbuilder-backend/internal/modules/auth/repository"
 )
 
 func (h *Handler) ListRoles(c *gin.Context) {

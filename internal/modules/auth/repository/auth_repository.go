@@ -10,7 +10,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	authmodel "github.com/ladev707/3dbuilder-backend/internal/src/auth/models"
+	authmodel "github.com/ladev707/3dbuilder-backend/internal/modules/auth/models"
 )
 
 var (
