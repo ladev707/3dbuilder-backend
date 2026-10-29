@@ -1,0 +1,49 @@
+# gqlgen configuration. Regenerate with: make graphql
+# Reference: https://gqlgen.com/config/
+
+# Where the schema lives. All files matching the glob are merged into one schema.
+schema:
+  - internal/graph/schema/*.graphqls
+
+# The "executor": code that parses requests, validates them against the
+# schema and calls your resolvers. Fully generated; never edit it by hand.
+exec:
+  layout: single-file
+  filename: internal/graph/generated/generated.go
+  package: generated
+
+# Go structs for schema types that are NOT bound to an existing struct.
+# Every type is bound via autobind below, so this file only holds empty
+# Query/Mutation placeholders.
+model:
+  filename: internal/graph/model/models_gen.go
+  package: model
+
+# Resolver stubs. "follow-schema" creates one file per schema file
+# (user.graphqls -> user.resolvers.go). On regeneration gqlgen keeps the
+# method bodies you wrote and adds stubs for new fields.
+resolver:
+  layout: follow-schema
+  dir: internal/graph/resolver
+  package: resolver
+  filename_template: "{name}.resolvers.go"
+
+# autobind: when the schema mentions a type (e.g. User), gqlgen first looks
+# for a Go struct with the same name in these packages and reuses it instead
+# of generating a new one. Fields match by name (isActive -> IsActive).
+# This is why there is no separate DTO layer.
+autobind:
+  - github.com/ladev707/3dbuilder-backend/internal/modules/user/models
+  - github.com/ladev707/3dbuilder-backend/internal/modules/customer/models
+
+# Explicit mappings from GraphQL scalars to Go types.
+autobind:
+  - github.com/ladev707/3dbuilder-backend/internal/modules/user/models
+models:
+  # Every ID! argument arrives in Go as a uuid.UUID. Invalid IDs such as "abc"
+  # are rejected by gqlgen before any resolver runs.
+  ID:
+    model:
+      - github.com/99designs/gqlgen/graphql.UUID
+    schema:
+    - internal/graph/schema/*.graphqls

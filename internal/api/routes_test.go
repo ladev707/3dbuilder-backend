@@ -56,7 +56,7 @@ func TestNewEngineRegistersRoutesWithoutDatabase(t *testing.T) {
 	for _, route := range routes {
 		registered[route.Method+" "+route.Path] = true
 	}
-	for _, route := range []string{"GET /health", "POST /api/v1/auth/user/login", "GET /api/v1/users"} {
+	for _, route := range []string{"GET /health", "POST /api/v1/auth/user/login", "GET /api/v1/users", "POST /api/v1/graphql"} {
 		if !registered[route] {
 			t.Errorf("route %s is not registered", route)
 		}

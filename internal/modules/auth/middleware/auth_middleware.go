@@ -1,6 +1,7 @@
 package authmiddleware
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"strings"
@@ -28,9 +29,36 @@ func Authenticate(parser TokenParser) gin.HandlerFunc {
 			abortUnauthorized(c)
 			return
 		}
+		// Store the claims in two places:
+		//   - the Gin context, read by Gin handlers via ClaimsFromContext;
+		//   - the standard request context, read by code that only receives a
+		//     context.Context (GraphQL resolvers and directives) via
+		//     ClaimsFromRequestContext.
+		// Contexts are immutable, so WithContext creates a copy of the request
+		// carrying the new context.
 		c.Set(config.ClaimsContextKey, claims)
+		c.Request = c.Request.WithContext(ContextWithClaims(c.Request.Context(), claims))
 		c.Next()
 	}
+}
+
+// claimsContextKey is the key for storing claims in a context.Context.
+// It is an unexported struct type rather than a string, so no other package
+// can create the same key and overwrite or read the value by accident.
+type claimsContextKey struct{}
+
+// ContextWithClaims returns a copy of ctx that carries claims. It exposes
+// the claims to handlers that only receive the request context, such as
+// GraphQL resolvers.
+func ContextWithClaims(ctx context.Context, claims *authservice.Claims) context.Context {
+	return context.WithValue(ctx, claimsContextKey{}, claims)
+}
+
+// ClaimsFromRequestContext returns the claims stored by Authenticate.
+// ok is false when the request was not authenticated.
+func ClaimsFromRequestContext(ctx context.Context) (*authservice.Claims, bool) {
+	claims, ok := ctx.Value(claimsContextKey{}).(*authservice.Claims)
+	return claims, ok
 }
 
 func RequireGate(gate authmodel.Gate) gin.HandlerFunc {

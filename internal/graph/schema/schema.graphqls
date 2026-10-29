@@ -1,0 +1,30 @@
+# Root schema shared by all modules.
+#
+# Two kinds of comments exist in GraphQL:
+#   - "# like this" is only for people reading the file;
+#   - """like this""" (a description) becomes part of the API and is shown in
+#     the Playground's Docs panel and to any client using introspection.
+#
+# After changing any .graphqls file, run `make graphql` to regenerate Go code.
+
+"""
+Rejects the field unless the caller's access token carries the permission.
+Implemented by hasPermission in internal/graph/handler.go.
+"""
+directive @hasPermission(permission: String!) on FIELD_DEFINITION
+
+"""
+An RFC 3339 timestamp, e.g. "2026-10-09T20:16:22+05:00". Built into gqlgen
+and mapped to Go's time.Time.
+"""
+scalar Time
+
+# The root types are declared empty here. Each module adds its fields with
+# `extend type Query` / `extend type Mutation` in its own file, so modules
+# stay independent.
+
+"Read-only operations."
+type Query
+
+"Operations that change data."
+type Mutation

@@ -1,0 +1,80 @@
+# Types here are bound to Go structs of the same name in
+# internal/modules/user/models (see "autobind" in gqlgen.yml).
+# Reminder: "!" means non-null. `User!` always returns a user; `User` may be null.
+
+"A back-office account that logs in through the user gate."
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  isActive: Boolean! = true
+  createdAt: Time!
+  updatedAt: Time!
+  deletedAt: Time
+}
+
+type UserAuthPayload {
+  user: User!
+  token: String!
+}
+"One page of users."
+type UserPage {
+  items: [User!]!
+  "Number of users matching the filter, across all pages."
+  totalCount: Int!
+}
+
+"Narrows the users list. Omitted fields do not filter."
+input UserFilter {
+  "Case-insensitive match on username or email."
+  search: String
+  isActive: Boolean
+}
+
+input LoginInput {
+  username: String!
+  password: String!
+}
+
+input CreateUserInput {
+  "3 to 80 characters."
+  username: String!
+  email: String!
+  "8 to 72 bytes. Stored only as a bcrypt hash."
+  password: String!
+  "Defaults to true."
+  isActive: Boolean
+}
+
+"""
+Omitted fields are left unchanged. Changing the password or deactivating the
+user logs them out of every session.
+"""
+input UpdateUserInput {
+  username: String
+  email: String
+  password: String
+  isActive: Boolean
+}
+
+extend type Query {
+  # Lists users, newest first. `limit` defaults to 20 and may be at most 100.
+  users(filter: UserFilter, limit: Int = 20, offset: Int = 0): UserPage! @hasPermission(permission: "users.read")
+  "Returns null when the user does not exist."
+  user(id: ID!): User @hasPermission(permission: "users.read")
+  me: User! @hasPermission(permission: "users.read")
+}
+
+extend type Mutation {
+  "Logs in a user and returns a JWT token."
+  login(input: LoginInput!): UserAuthPayload!
+  "Creates a user. Fails with CONFLICT if the username or email is taken."
+  createUser(input: CreateUserInput!): UserAuthPayload! @hasPermission(permission: "users.create")
+  "Updates a user. You cannot deactivate your own account."
+  updateUser(id: ID!, input: UpdateUserInput!): User! @hasPermission(permission: "users.update")
+  """
+  Soft-deletes a user and logs them out. Their username and email become
+  available again. You cannot delete your own account.
+  """
+  deleteUser(id: ID!): Boolean! @hasPermission(permission: "users.delete")
+}

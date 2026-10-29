@@ -17,9 +17,19 @@ type AuthConfig struct {
 }
 
 type Config struct {
-	AppPort     string
+	AppPort string
+	// Environment comes from ENVIRONMENT ("local", "production", ...) and
+	// defaults to "local".
+	Environment string
 	DatabaseURL string
 	Auth        AuthConfig
+}
+
+// IsProduction reports whether the app runs in production. Development-only
+// features are switched off there: the GraphQL Playground and schema
+// introspection.
+func (c Config) IsProduction() bool {
+	return c.Environment == "production"
 }
 
 func Load() (Config, error) {
@@ -34,6 +44,7 @@ func Load() (Config, error) {
 
 	cfg := Config{
 		AppPort:     envOrDefault("APP_PORT", "8080"),
+		Environment: envOrDefault("ENVIRONMENT", "local"),
 		DatabaseURL: os.Getenv("DB_URL"),
 		Auth: AuthConfig{
 			Secret:          os.Getenv("AUTH_JWT_SECRET"),

@@ -1,0 +1,76 @@
+# Customer management for back-office users.
+#
+# Types here are bound to Go structs of the same name in
+# internal/modules/customer/models (see "autobind" in gqlgen.yml).
+
+"A storefront account that logs in through the customer gate."
+type Customer {
+  "UUID of the customer."
+  id: ID!
+  username: String!
+  "Stored lowercased."
+  email: String!
+  "Inactive customers cannot log in."
+  isActive: Boolean!
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+"One page of customers."
+type CustomerPage {
+  items: [Customer!]!
+  "Number of customers matching the filter, across all pages."
+  totalCount: Int!
+}
+
+"Narrows the customers list. Omitted fields do not filter."
+input CustomerFilter {
+  "Case-insensitive match on username or email."
+  search: String
+  isActive: Boolean
+}
+
+input CreateCustomerInput {
+  "3 to 80 characters."
+  username: String!
+  email: String!
+  "8 to 72 bytes. Stored only as a bcrypt hash."
+  password: String!
+  "Defaults to true."
+  isActive: Boolean
+}
+
+"""
+Omitted fields are left unchanged. Changing the password or deactivating the
+customer logs them out of every session.
+"""
+input UpdateCustomerInput {
+  username: String
+  email: String
+  password: String
+  isActive: Boolean
+}
+
+extend type Query {
+  """
+  Lists customers, newest first. `limit` defaults to 20 and may be at most 100.
+  """
+  customers(filter: CustomerFilter, limit: Int = 20, offset: Int = 0): CustomerPage! @hasPermission(permission: "customers.read")
+  "Returns null when the customer does not exist."
+  customer(id: ID!): Customer @hasPermission(permission: "customers.read")
+}
+
+extend type Mutation {
+  """
+  Creates a customer with the default "customer" role, so they can log in
+  immediately. Fails with CONFLICT if the username or email is taken.
+  """
+  createCustomer(input: CreateCustomerInput!): Customer! @hasPermission(permission: "customers.create")
+  "Updates a customer."
+  updateCustomer(id: ID!, input: UpdateCustomerInput!): Customer! @hasPermission(permission: "customers.update")
+  """
+  Soft-deletes a customer and logs them out. Their username and email become
+  available again.
+  """
+  deleteCustomer(id: ID!): Boolean! @hasPermission(permission: "customers.delete")
+}
