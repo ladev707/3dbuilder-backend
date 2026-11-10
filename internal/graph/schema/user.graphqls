@@ -7,7 +7,7 @@ type User {
   id: ID!
   username: String!
   email: String!
-  isActive: Boolean! = true
+  isActive: Boolean!
   createdAt: Time!
   updatedAt: Time!
   deletedAt: Time
@@ -69,7 +69,7 @@ extend type Mutation {
   "Logs in a user and returns a JWT token."
   login(input: LoginInput!): UserAuthPayload!
   "Creates a user. Fails with CONFLICT if the username or email is taken."
-  createUser(input: CreateUserInput!): UserAuthPayload! @hasPermission(permission: "users.create")
+  createUser(input: CreateUserInput!): User! @hasPermission(permission: "users.create")
   "Updates a user. You cannot deactivate your own account."
   updateUser(id: ID!, input: UpdateUserInput!): User! @hasPermission(permission: "users.update")
   """

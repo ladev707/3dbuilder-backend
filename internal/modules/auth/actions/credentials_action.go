@@ -6,10 +6,17 @@ package auth
 
 import (
 	"net/mail"
+	"strconv"
 	"strings"
+	"unicode"
 	"unicode/utf8"
 
 	"github.com/ladev707/3dbuilder-backend/internal/apperr"
+)
+
+const (
+	minPasswordLength = 8
+	maxPasswordLength = 72
 )
 
 // NormalizeUsername removes surrounding whitespace so " jane " and "jane"
@@ -26,7 +33,7 @@ func NormalizeEmail(email string) string {
 }
 
 // ValidateUsername requires 3 to 80 characters. The upper limit matches the
-// VARCHAR(80) column in migrations/00001_auth_rbac.sql.
+// VARCHAR(80) column in migrations/00001_create_users_table.sql.
 func ValidateUsername(username string) error {
 	// RuneCountInString counts characters, not bytes, so "jöhn" is 4 long.
 	if length := utf8.RuneCountInString(username); length < 3 || length > 80 {
@@ -51,8 +58,33 @@ func ValidateEmail(email string) error {
 // ValidatePassword requires 8 to 72 bytes. bcrypt rejects passwords longer
 // than 72 bytes, so the limit is checked before hashing.
 func ValidatePassword(password string) error {
-	if len(password) < 8 || len(password) > 72 {
-		return apperr.New(apperr.InvalidInput, "password must be between 8 and 72 bytes")
+	var (
+		hasUppercase bool
+		hasLowercase bool
+		hasNumber    bool
+		hasSpecial   bool
+	)
+	specialChars := "!@#$%^&*()_+-=[]{}|;:,.<>?"
+	for _, char := range password {
+		switch {
+		case unicode.IsUpper(char):
+			hasUppercase = true
+		case unicode.IsLower(char):
+			hasLowercase = true
+		case unicode.IsDigit(char):
+			hasNumber = true
+		case unicode.IsSymbol(char) || unicode.IsPunct(char) || strings.ContainsRune(specialChars, char):
+			hasSpecial = true
+		}
+	}
+	if len(password) < minPasswordLength {
+		return apperr.New(apperr.InvalidInput, "password must be at least "+strconv.Itoa(minPasswordLength)+" characters")
+	}
+	if len(password) > maxPasswordLength {
+		return apperr.New(apperr.InvalidInput, "password must be no more than "+strconv.Itoa(maxPasswordLength)+" characters")
+	}
+	if !hasUppercase || !hasLowercase || !hasNumber || !hasSpecial {
+		return apperr.New(apperr.InvalidInput, "password must contain at least one uppercase letter, one lowercase letter, one number, and one special character")
 	}
 	return nil
 }

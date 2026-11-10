@@ -26,6 +26,12 @@ type User struct {
 	DeletedAt    *time.Time `json:"deleted_at,omitempty"`
 }
 
+type UserAuthPayload struct {
+	User  User       `json:"user"`
+	Roles []UserRole `json:"roles"`
+	Token string     `json:"token"`
+}
+
 // UserRole links a user to a role name.
 type UserRole struct {
 	ID   uuid.UUID `json:"id"`

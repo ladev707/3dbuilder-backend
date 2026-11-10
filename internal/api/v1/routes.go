@@ -16,8 +16,7 @@ type Dependencies struct {
 	AuthHandler *authhandler.Handler
 	AuthService *authservice.Service
 	// GraphQLHandler serves the user and customer CRUD API (see internal/graph).
-	GraphQLHandler http.Handler
-	// EnablePlayground mounts the browser IDE at /graphql/playground.
+	GraphQLHandler   http.Handler
 	EnablePlayground bool
 }
 

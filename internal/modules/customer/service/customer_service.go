@@ -19,8 +19,8 @@ const (
 	DefaultPageSize = 20
 	MaxPageSize     = 100
 	// DefaultRole is assigned to every new customer. It is seeded in
-	// migrations/00001_auth_rbac.sql with the profile.read and profile.update
-	// permissions.
+	// migrations/00003_create_rbac_tables.sql with the profile.read and
+	// profile.update permissions.
 	DefaultRole = "customer"
 )
 

@@ -2,10 +2,24 @@
 
 package model
 
+import (
+	usermodel "github.com/ladev707/3dbuilder-backend/internal/modules/user/models"
+)
+
+type LoginInput struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 // Operations that change data.
 type Mutation struct {
 }
 
 // Read-only operations.
 type Query struct {
+}
+
+type UserAuthPayload struct {
+	User  *usermodel.User `json:"user"`
+	Token string          `json:"token"`
 }
